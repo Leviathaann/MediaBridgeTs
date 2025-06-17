@@ -1,36 +1,15 @@
 import express from "express";
 import dotenv from "dotenv";
-
+import showsRouter from "./routes/shows.routes.js";
+import moviesRouter from "./routes/movies.routes.js";
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 3000;
-const serverIP = process.env.EMBY_SERVER_IP;
-const apiKey = process.env.EMBY_API_KEY || "";
-const userId = process.env.EMBY_USER_ID;
+const port = process.env.PORT;
 
-app.get("/shows", async (_req, res) => {
-  try {
-    const response = await fetch(
-      `${serverIP}/Users/${userId}/Items?IncludeItemTypes=Series&Recursive=true`,
-      {
-        headers: { "X-Emby-Token": apiKey },
-      },
-    );
-
-    if (!response.ok) {
-      throw new Error(`Emby api error: ${response.status}`);
-    }
-
-    const shows = await response.json();
-    res.json(shows);
-  } catch (err) {
-    if (err instanceof Error) {
-      console.log(err);
-    }
-  }
-});
+app.use("/api/shows", showsRouter);
+app.use("/api/movies", moviesRouter);
 
 app.listen(port, () => {
-  console.log(`Listening on port: ${port}`);
+  console.log(`listening on port: ${port}`);
 });
