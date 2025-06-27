@@ -12,11 +12,9 @@ public class WebClientConfig {
     @Value("${emby.api.url}")
     private String embyApiUrl;
 
-
-
     // This will be injected with the api key for auth
     @Bean
-    public WebClient embyWebClient(WebClient.Builder webClientBuilder){
+    public WebClient embyWebClient(WebClient.Builder webClientBuilder) {
         return webClientBuilder
                 .baseUrl(embyApiUrl)
                 .build();
@@ -29,7 +27,8 @@ public class WebClientConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/api/**")
-                        .allowedOrigins("http://localhost:3001", "http://localhost:3000", "http://localhost:5173", "http://localhost:4200")
+                        .allowedOrigins("http://localhost:3001", "http://localhost:3000", "http://localhost:5173",
+                                "http://localhost:4200", "http://192.168.0.20:5174", "http://192.168.0.20:3000")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);

@@ -7,10 +7,10 @@ import lombok.Data;
 public class ImageTags {
     @JsonProperty("Primary")
     private String primary;
-    
+
     @JsonProperty("Logo")
     private String logo;
-    
+
     @JsonProperty("Thumb")
     private String thumb;
 }

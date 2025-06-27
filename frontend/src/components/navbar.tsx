@@ -18,14 +18,14 @@ export function AppNavbar() {
         ></IconButton>
 
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          My Emby Bridge
+          Emby Bridge
         </Typography>
 
         {/* Use Link components for navigation */}
         <Button color="inherit" component={Link} to="/movies">
           Movies
         </Button>
-        <Button color="inherit" component={Link} to="/tvshows">
+        <Button color="inherit" component={Link} to="/shows">
           TV Shows
         </Button>
         <Button color="inherit" component={Link} to="/settings">

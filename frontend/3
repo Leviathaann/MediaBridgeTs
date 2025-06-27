@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Grid, Box, Container, Typography } from "@mui/material";
 import { ShowCard, type Show } from "../components/showCard";
 
+
 const baseURL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 export function ShowsPage() {
   const [shows, setShows] = useState<Show[]>([]);
@@ -13,6 +14,7 @@ export function ShowsPage() {
       try {
         setLoading(true);
         setError(null);
+
         const showsResponse = await fetch(`${baseURL}/api/shows`);
         if (!showsResponse.ok) {
           throw new Error(`HTTP error! Status: ${showsResponse.status}`);

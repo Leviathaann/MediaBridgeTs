@@ -2,13 +2,18 @@
 import { useState, useEffect } from "react";
 import { Grid, Box, Container, Typography } from "@mui/material";
 import { MovieCard, type Movie } from "../components/movieCard";
+import { VideoPlayer } from "../components/VideoPlayer";
 
-export const baseURL = "http://localhost:3000";
+const baseURL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 export function MoviesPage() {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
+  const [playerOpen, setPlayerOpen] = useState(false);
+  const [streamUrl, setStreamUrl] = useState<string>("");
+
 
   useEffect(() => {
     async function fetchMoviesWithImages() {
@@ -62,6 +67,38 @@ export function MoviesPage() {
     fetchMoviesWithImages();
   }, []);
 
+  const handlePlayMovie = async (movie: Movie) => {
+    console.log("Playing movie:", movie.Name, "ID:", movie.Id);
+    
+    // Set the stream URL FIRST before opening the player
+    const fallbackStreamUrl = `${baseURL}/api/stream/${movie.Id}`;
+    console.log("Setting stream URL:", fallbackStreamUrl);
+    
+    setSelectedMovie(movie);
+    setStreamUrl(fallbackStreamUrl); // Set the fallback URL immediately
+    setPlayerOpen(true);
+    
+    // Try to get a better stream URL if possible
+    try {
+      const streamResponse = await fetch(`${baseURL}/api/stream/test-url/${movie.Id}`);
+      if (streamResponse.ok) {
+        const betterStreamUrl = await streamResponse.text();
+        console.log("Got better stream URL:", betterStreamUrl);
+        setStreamUrl(betterStreamUrl);
+      }
+    } catch (error) {
+      console.log("Could not get better stream URL, using fallback:", error);
+      // Already set the fallback URL above, so we're good
+    }
+  };
+
+  const handleClosePlayer = () => {
+    setPlayerOpen(false);
+    setSelectedMovie(null);
+    setStreamUrl("");
+  };
+
+
   if (loading) {
     return (
       <Box sx={{ display: "flex", justifyContent: "center", p: 4 }}>
@@ -80,15 +117,31 @@ export function MoviesPage() {
 
   const MAX_WORDS = 4;
 
-  return (
+return (
+  <>
     <Container maxWidth="xl" sx={{ py: 4 }}>
       <Grid container spacing={4} justifyContent={"center"}>
         {movies.map((movie) => (
           <Grid item xs={6} sm={4} md={3} lg={2} xl={1} key={movie.Id}>
-            <MovieCard movie={movie} maxWords={MAX_WORDS} />
+            <MovieCard 
+              movie={movie} 
+              maxWords={MAX_WORDS} 
+              onPlay={handlePlayMovie}
+            />
           </Grid>
         ))}
       </Grid>
     </Container>
-  );
+
+    {selectedMovie && (
+      <VideoPlayer
+        open={playerOpen}
+        onClose={handleClosePlayer}
+        url={streamUrl}
+        title={selectedMovie.Name}
+        poster={selectedMovie.imageUrl}
+      />
+    )}
+  </>
+);
 }

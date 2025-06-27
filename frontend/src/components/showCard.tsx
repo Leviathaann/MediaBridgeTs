@@ -1,6 +1,6 @@
 import { Card, CardMedia, CardContent, Typography } from "@mui/material";
 
-export interface Movie {
+export interface Show {
   Name: string;
   Id: string;
   ImageTags: {
@@ -11,11 +11,10 @@ export interface Movie {
   imageUrl?: string;
 }
 
-// Define props for your MovieCard component
-interface MovieCardProps {
-  movie: Movie;
-  maxWords?: number; // Optional prop for word truncation limit
-  onPlay?: (movie: Movie) => void;
+// Props for show card
+interface ShowCardProps {
+  show: Show;
+  maxWords?: number;
 }
 
 // Helper function (can be moved to a utilities file if used elsewhere)
@@ -28,33 +27,21 @@ function truncateByWordCount(text: string, maxWords: number): string {
   return words.slice(0, maxWords).join(" ") + "...";
 }
 
-export function MovieCard({ movie, maxWords = 4, onPlay }: MovieCardProps) {
-  const handleClick = () => {
-    if (onPlay) {
-      onPlay(movie);
-    }
-  };
-
+export function ShowCard({ show, maxWords = 4 }: ShowCardProps) {
   return (
     <Card
-      onClick={handleClick}
       sx={{
         display: "flex",
         flexDirection: "column",
         height: "100%",
-        cursor: onPlay ? "pointer" : "default",
-        transition: "transform 0.2s",
-        "&:hover": onPlay ? {
-          transform: "scale(1.05)",
-        } : {},
       }}
     >
       <CardMedia
         component="img"
         image={
-          movie.imageUrl || "https://via.placeholder.com/200x300?text=No+Image"
+          show.imageUrl || "https://via.placeholder.com/200x300?text=No+Image"
         }
-        alt={movie.Name}
+        alt={show.Name}
         sx={{
           height: 400,
           width: "100%",
@@ -74,7 +61,7 @@ export function MovieCard({ movie, maxWords = 4, onPlay }: MovieCardProps) {
         }}
       >
         <Typography variant="body2" textAlign={"center"}>
-          {truncateByWordCount(movie.Name, maxWords)}
+          {truncateByWordCount(show.Name, maxWords)}
         </Typography>
       </CardContent>
     </Card>

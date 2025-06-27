@@ -4,9 +4,8 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { AppNavbar } from "./components/navbar";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { MoviesPage } from "./pages/moviesPage";
+import { ShowsPage } from "./pages/showsPage";
 // import { showsPage } from "./pages/showsPage";
-
-export const baseURL = "http://localhost:3000";
 
 const darkTheme = createTheme({
   palette: {
@@ -64,7 +63,7 @@ function App() {
               color="text.primary"
               gutterBottom
             >
-              My Emby Media
+              Emby Media
             </Typography>
             <Typography
               variant="h5"
@@ -72,7 +71,7 @@ function App() {
               color="text.secondary"
               paragraph
             >
-              Browse your favorite movies and TV shows.
+              Watch Media Directly From Your Emby In The Browser
             </Typography>
           </Container>
         </Box>
@@ -82,6 +81,7 @@ function App() {
           <Routes>
             <Route path="/" element={<MoviesPage />} />
             <Route path="/movies" element={<MoviesPage />} />
+            <Route path="/shows" element={<ShowsPage />} />
             <Route
               path="*"
               element={

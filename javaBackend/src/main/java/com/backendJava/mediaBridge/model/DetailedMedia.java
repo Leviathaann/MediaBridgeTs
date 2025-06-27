@@ -1,13 +1,12 @@
 package com.backendJava.mediaBridge.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
-import org.apache.catalina.User;
-
 import java.util.List;
+import lombok.Data;
 
 @Data
 public class DetailedMedia {
+
     @JsonProperty("Name")
     private String name;
 
